@@ -23,13 +23,14 @@ let app = new Vue({
         ],
         sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
         cart: 0,
+        inStock: true,
     },
     methods: {
         addToCart() {
             this.cart += 1
         },
         reduceToCart() {
-            this.cart += 1
+            this.cart -= 1
         },
         updateProduct(variantImage) {
             this.image = variantImage
