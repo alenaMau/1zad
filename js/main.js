@@ -41,8 +41,8 @@ Vue.component('product', {
             </div>
             <div>
         </div>
-        <product-tabs :reviews="reviews" :shipping="shipping" :details="details"></product-tabs>
    </div>
+   <product-tabs :reviews="reviews" :shipping="shipping" :details="details"></product-tabs>
  `,
     data() {
         return {
