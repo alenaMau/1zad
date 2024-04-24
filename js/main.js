@@ -13,7 +13,6 @@ Vue.component('product', {
             <img :src="image" :alt="altText" />
         </div>
         <div class="product-info">
-        <detail-tabs :shipping="shipping" :details="details"></detail-tabs>
             <h1>{{ title }}</h1>
             <p>User is premium: {{ premium }}</p>
             <p v-if="inventory > 10">In stock</p>
@@ -41,8 +40,7 @@ Vue.component('product', {
             <button v-on:click="addToCart" :disabled="!inStock" :class="{ disabledButton: !inStock }">Add to cart</button>
             <button v-on:click="deleteFromCart" :disabled="!inStock" :class="{ disabledButton: !inStock }">Reduce to cart</button>
             <div>
-         <product-tabs :reviews="reviews"></product-tabs>
-
+            <product-tabs :reviews="reviews" :shipping="shipping" :details="details"></product-tabs>
         </div>
    </div>
  `,
@@ -162,8 +160,7 @@ Vue.component('product-review', {
         <label>
           No
           <input type="radio" value="No" v-model="recommend"/>
-        </label>
-            
+        </label> 
         <p>
           <input type="submit" value="Submit">  
         </p>    
@@ -177,13 +174,15 @@ Vue.component('product-review', {
             rating: null,
             errors: [],
             recommend: null,
-
         }
     },
     methods: {
         onSubmit() {
             this.errors = []
             if (this.name && this.review && this.rating && this.recommend ) {
+                if (this.rating === 5 || 4 || 3) {
+
+                }
                 let productReview = {
                     name: this.name,
                     review: this.review,
@@ -222,6 +221,13 @@ Vue.component('product-tabs', {
         reviews: {
             type: Array,
             required: false
+        },
+        shipping: {
+            required: true
+        },
+        details: {
+            type: Array,
+            required: true
         }
     },
     template: `
@@ -234,7 +240,7 @@ Vue.component('product-tabs', {
         <div v-show="selectedTab === 'Reviews'">
             <p v-if="!reviews.length">There are no reviews yet.</p>
             <ul>
-                <li v-for="review in reviews">
+               <li v-for="review in reviews" :class="{ 'red-background': review.rating <= 2, 'green-background': review.rating > 2 }">
                   <p>{{ review.name }}</p>
                   <p>Rating:{{ review.rating }}</p>
                   <p>{{ review.review }}</p>
@@ -245,13 +251,35 @@ Vue.component('product-tabs', {
         <div v-show="selectedTab === 'Make a Review'">
           <product-review></product-review>
         </div>
+        
+      
+        <ul>
+          <span class="tabs" :class="{ activeTab: selectedTab === tab }" v-for="(tab, index) in tabs" @click="selectedTab = tab"
+          >{{ tab }}</span>
+        </ul>
+
+        <div v-show="selectedTab === 'Shipping'">
+          <p>{{ shipping }}</p>
+        </div>
+
+        <div v-show="selectedTab === 'Details'">
+          <ul>
+            <li v-for="detail in details">{{ detail }}</li>
+          </ul>
+        </div>
     
       </div>
+    
     `,
     data() {
         return {
-            tabs: ['Reviews', 'Make a Review'],
+            tabs: ['Reviews', 'Make a Review','Shipping', 'Details'],
             selectedTab: 'Reviews'
+        }
+    },
+    created() {
+        if(this.reviews.rating===5||4||3) {
+
         }
     }
 })
@@ -289,13 +317,10 @@ Vue.component('detail-tabs', {
     data() {
         return {
             tabs: ['Shipping', 'Details'],
-            selectedTab: 'Shipping'
+
         }
     }
 })
-
-
-
 
 
 
