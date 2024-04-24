@@ -74,6 +74,12 @@ button {
     background-color: #50db50;
 }
 
+.row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
 .review-form {
     width: 400px;
     padding: 20px;
@@ -93,11 +99,12 @@ textarea {
 }
 
 .tab {
-    margin-left: 20px;
+    margin: 20px;
     cursor: pointer;
 }
 
 .activeTab {
     color: #16C0B0;
+    margin: 10px;
     text-decoration: underline;
 }
